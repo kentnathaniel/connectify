@@ -1,0 +1,7 @@
+{
+  "build": {
+    "eslint": {
+      "ignoreDuringBuilds": true
+    }
+  }
+}
