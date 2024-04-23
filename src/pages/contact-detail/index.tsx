@@ -1,4 +1,4 @@
-import { Avatar, Center, Circle, Flex, Icon, Input, Text, VStack } from "@/components/index";
+import { Avatar, Center, Circle, Flex, Icon, Input, Text } from "@/components/index";
 
 import { useGetDetailContactQuery } from "@/services/index";
 import { show } from "@/stores/popup";
