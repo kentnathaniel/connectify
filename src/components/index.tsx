@@ -1,15 +1,12 @@
+import { Link as ReactRouterLink, LinkProps as RouterLinkProps } from "react-router-dom";
 import { Link as ChakraLink, LinkProps } from "@chakra-ui/react";
 
-export function Link({ children, onClick, ...rest }: LinkProps): ReturnType<typeof ChakraLink> {
+export function Link({
+  children,
+  ...rest
+}: LinkProps & RouterLinkProps): ReturnType<typeof ChakraLink> {
   return (
-    <ChakraLink
-      _hover={{ textDecoration: "none" }}
-      onClick={(e) => {
-        e.preventDefault;
-        onClick?.(e);
-      }}
-      {...rest}
-    >
+    <ChakraLink as={ReactRouterLink} _hover={{ textDecoration: "none" }} {...rest}>
       {children}
     </ChakraLink>
   );

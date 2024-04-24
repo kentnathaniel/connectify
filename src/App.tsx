@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Box, ChakraProvider, Container, VStack, extendTheme } from "@chakra-ui/react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Home, Favorites, ContactDetail } from "./pages/index";
+import { Home, ContactDetail } from "./pages/index";
 import { PATH } from "./constants";
 import { Navbar } from "./components";
 import ModalDeleteContact from "./components/Drawers/DeleteContact";
@@ -12,10 +12,6 @@ import ModalEditContact from "./components/Drawers/EditContact";
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
-  {
-    path: PATH.FAVORITES,
-    element: <Favorites />,
-  },
   {
     path: PATH.CONTACT,
     element: <ContactDetail />,
@@ -40,10 +36,7 @@ function App() {
         <ChakraProvider theme={theme}>
           <Box bg="gray.700" w="100vw" h="100vh" overflow="hidden">
             <Container bg="white" py={2} px={4} h="100vh" maxW="container.md">
-              <Navbar />
-              <VStack py={8} flexDirection="column" mx="auto" alignItems="flex-start">
-                <RouterProvider router={router} />
-              </VStack>
+              <RouterProvider router={router} />
             </Container>
           </Box>
           <ModalEditContact />

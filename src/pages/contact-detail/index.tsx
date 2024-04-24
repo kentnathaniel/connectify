@@ -1,11 +1,11 @@
-import { Center, Flex, Icon, PhotoUploader, Text } from "@/components/index";
+import { Center, Flex, Icon, Link, Navbar, PhotoUploader, Text, Tooltip } from "@/components/index";
 import { PATH } from "@/constants/path";
 
 import { useGetDetailContactQuery, useUpdateContact } from "@/services/index";
 import { show } from "@/stores/popup";
 import { PopupType } from "@/types/index.type";
 import { ChakraProps, HStack } from "@chakra-ui/react";
-import { IconCamera, IconHeart, IconPencil, IconTrash } from "@tabler/icons-react";
+import { IconAddressBook, IconCamera, IconHeart, IconPencil, IconTrash } from "@tabler/icons-react";
 import { useCallback, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { Navigate, useParams } from "react-router-dom";
@@ -83,6 +83,15 @@ function ContactDetail() {
 
   return (
     <>
+      <Navbar
+        menu={
+          <Link to={PATH.HOME}>
+            <Tooltip label="View Contacts">
+              <Icon as={IconAddressBook} cursor="pointer" color="blue.700" w={8} h={8} />
+            </Tooltip>
+          </Link>
+        }
+      />
       <Center w="100%" flexDirection="column">
         <PhotoUploader
           id="update-photo-uploader"

@@ -1,43 +1,17 @@
-import { Flex, Icon, Link, Tooltip } from "@/components/index";
-import { show } from "@/stores/popup";
-import { PopupType } from "@/types/index.type";
-import { IconHeart, IconMoodPlus } from "@tabler/icons-react";
-import { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { Flex, Icon, Link } from "@/components/index";
+import { ReactElement } from "react";
 import ConnectifyLogo from "@/assets/connectify-logo.svg?react";
 import { PATH } from "@/constants/path";
 
-function Navbar() {
-  const dispatch = useDispatch();
-
-  const onCreate = useCallback(() => {
-    dispatch(
-      show({
-        type: PopupType.CREATE,
-      })
-    );
-  }, [dispatch]);
+function Navbar(props: { menu?: ReactElement }) {
+  const { menu } = props;
 
   return (
-    <Flex pt={4} mx="auto" justifyContent="space-between" align="center">
-      <Link href={PATH.HOME}>
+    <Flex py={4} mx="auto" justifyContent="space-between" align="center">
+      <Link to={PATH.HOME} h={12}>
         <Icon as={ConnectifyLogo} w={40} h={12} />
       </Link>
-      <Flex gap={4}>
-        <Tooltip label="Add new contact">
-          <Icon
-            as={IconMoodPlus}
-            w={8}
-            h={8}
-            color="blue.500"
-            onClick={onCreate}
-            cursor="pointer"
-          />
-        </Tooltip>
-        <Tooltip label="View Favorites">
-          <Icon as={IconHeart} w={8} h={8} color="pink.300" cursor="pointer" />
-        </Tooltip>
-      </Flex>
+      {menu}
     </Flex>
   );
 }

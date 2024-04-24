@@ -1,7 +1,34 @@
-import { Input, VStack, ContactCard } from "@/components/index";
+import { Input, VStack, ContactCard, Flex, Tooltip, Icon, Navbar } from "@/components/index";
 import { useGetContactQuery } from "@/services/index";
+import { show } from "@/stores/popup";
+import { PopupType } from "@/types/index.type";
 import { useToken } from "@chakra-ui/react";
-import { useState } from "react";
+import { IconHeart, IconMoodPlus } from "@tabler/icons-react";
+import { useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
+
+function HomeNavbarMenu() {
+  const dispatch = useDispatch();
+
+  const onCreate = useCallback(() => {
+    dispatch(
+      show({
+        type: PopupType.CREATE,
+      })
+    );
+  }, [dispatch]);
+
+  return (
+    <Flex gap={4}>
+      <Tooltip label="Add new contact">
+        <Icon as={IconMoodPlus} w={8} h={8} color="blue.500" onClick={onCreate} cursor="pointer" />
+      </Tooltip>
+      <Tooltip label="View Favorites">
+        <Icon as={IconHeart} w={8} h={8} color="pink.300" cursor="pointer" />
+      </Tooltip>
+    </Flex>
+  );
+}
 
 function Home() {
   const { contacts } = useGetContactQuery();
@@ -17,6 +44,7 @@ function Home() {
 
   return (
     <>
+      <Navbar menu={<HomeNavbarMenu />} />
       <Input
         placeholder="Search contact"
         value={searchValue}

@@ -30,7 +30,7 @@ function ContactCard(props: Props) {
   };
 
   return (
-    <Link w="100%" href={generatePath(PATH.CONTACT, { id })}>
+    <Link w="100%" to={generatePath(PATH.CONTACT, { id })}>
       <Flex
         alignItems="center"
         width="100%"
