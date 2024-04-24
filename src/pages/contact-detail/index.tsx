@@ -1,11 +1,19 @@
 import { Center, Flex, Icon, Link, Navbar, PhotoUploader, Text, Tooltip } from "@/components/index";
 import { PATH } from "@/constants/path";
-
+import { useToggleFavorite } from "@/hooks/index";
 import { useGetDetailContactQuery, useUpdateContact } from "@/services/index";
+import { toggleFavorite } from "@/stores/favorites";
 import { show } from "@/stores/popup";
 import { PopupType } from "@/types/index.type";
 import { ChakraProps, HStack } from "@chakra-ui/react";
-import { IconAddressBook, IconCamera, IconHeart, IconPencil, IconTrash } from "@tabler/icons-react";
+import {
+  IconAddressBook,
+  IconCamera,
+  IconHeart,
+  IconHeartFilled,
+  IconPencil,
+  IconTrash,
+} from "@tabler/icons-react";
 import { useCallback, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { Navigate, useParams } from "react-router-dom";
@@ -23,6 +31,7 @@ function ContactDetail() {
 
   const { contact } = useGetDetailContactQuery(id);
   const { mutateAsync: updateContact, isPending: isPendingUpdateContact } = useUpdateContact();
+  const { onToggleFavorite, isFavorite } = useToggleFavorite(id ?? "");
 
   const onDelete = useCallback(() => {
     dispatch(
@@ -50,9 +59,10 @@ function ContactDetail() {
         onClick: () => onEdit(),
       },
       {
-        icon: IconHeart,
-        label: "Save as Favorite",
+        icon: isFavorite ? IconHeartFilled : IconHeart,
+        label: isFavorite ? "Unfavorite" : "Save as Favorite",
         color: "pink.300",
+        onClick: () => onToggleFavorite(),
       },
       {
         icon: IconTrash,
@@ -61,7 +71,7 @@ function ContactDetail() {
         onClick: () => onDelete(),
       },
     ],
-    [onDelete, onEdit]
+    [onDelete, onEdit, isFavorite, onToggleFavorite]
   );
 
   const onChangePhoto = async (photo: string) => {

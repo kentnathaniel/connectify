@@ -3,30 +3,36 @@ import { RenderOptions, render } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { faker } from "@faker-js/faker";
 
-import { AppStore, RootState, setupStore } from "../stores";
+import { RootState, getTestingStore, persistor } from "../stores";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { getFullName } from "./string-helper";
+import { PersistGate } from "redux-persist/integration/react";
+import { BrowserRouter } from "react-router-dom";
 
 const queryClient = new QueryClient();
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
   preloadedState?: Partial<RootState>;
-  store?: AppStore;
+  store?: ReturnType<typeof getTestingStore>;
 }
 
 export function renderWithProviders(
   ui: React.ReactElement,
   {
     preloadedState = {},
-    store = setupStore(preloadedState),
+    store = getTestingStore(preloadedState),
     ...renderOptions
   }: ExtendedRenderOptions = {}
 ) {
   function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
     return (
-      <QueryClientProvider client={queryClient}>
-        <Provider store={store}>{children}</Provider>
-      </QueryClientProvider>
+      <BrowserRouter>
+        <Provider store={store}>
+          <PersistGate persistor={persistor} loading={null}>
+            <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+          </PersistGate>
+        </Provider>
+      </BrowserRouter>
     );
   }
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };

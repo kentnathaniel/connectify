@@ -1,11 +1,12 @@
 import { Avatar, Flex, Text, Icon, Tooltip, Link } from "@/components/index";
 import { Contact, PopupType } from "@/types/index.type";
-import { IconTrash, IconHeart } from "@tabler/icons-react";
+import { IconTrash, IconHeart, IconHeartFilled } from "@tabler/icons-react";
 import { PATH } from "@/constants/path";
 import { generatePath } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { show } from "@/stores/popup";
 import { CONTACT_CARD_TEST_ID } from "./ContactCard.const";
+import { useToggleFavorite } from "@/hooks/index";
 
 type Props = {
   data: Contact;
@@ -17,6 +18,7 @@ function ContactCard(props: Props) {
   } = props;
 
   const dispatch = useDispatch();
+  const { onToggleFavorite, isFavorite } = useToggleFavorite(id ?? "");
 
   const onDelete = (e: React.MouseEvent<SVGSVGElement>) => {
     e.preventDefault();
@@ -53,7 +55,16 @@ function ContactCard(props: Props) {
           </Flex>
           <Flex ml="auto" gap={4}>
             <Tooltip label="Save to favorites" aria-label="favorite-tooltip">
-              <Icon as={IconHeart} w={6} h={6} color="pink.300" />
+              <Icon
+                as={isFavorite ? IconHeartFilled : IconHeart}
+                w={6}
+                h={6}
+                color="pink.300"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onToggleFavorite();
+                }}
+              />
             </Tooltip>
             <Tooltip label="Delete contact" aria-label="delete-tooltip">
               <Icon

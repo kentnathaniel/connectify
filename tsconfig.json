@@ -23,8 +23,9 @@
 
     "paths": {
       "@/assets/*": ["src/assets/*"],
-      "@/constants/*": ["src/constants/*"],
       "@/components/*": ["src/components/*"],
+      "@/constants/*": ["src/constants/*"],
+      "@/hooks/*": ["src/hooks/*"],
       "@/pages/*": ["src/pages/*"],
       "@/services/*": ["src/services/*"],
       "@/specs/*": ["src/specs/*"],

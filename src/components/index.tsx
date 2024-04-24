@@ -30,6 +30,7 @@ export {
   Circle,
   Container,
   CircularProgress,
+  Image,
 } from "@chakra-ui/react";
 
 export { default as ContactCard } from "./ContactCard";
