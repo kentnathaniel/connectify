@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-
+import svgr from "vite-plugin-svgr";
 import path from "path";
 import * as url from "url";
 
@@ -8,9 +8,10 @@ const dirName = url.fileURLToPath(new URL(".", import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), svgr()],
   resolve: {
     alias: {
+      "@/assets": path.resolve(dirName, "src/assets/"),
       "@/constants": path.resolve(dirName, "src/constants/"),
       "@/components": path.resolve(dirName, "src/components/"),
       "@/pages": path.resolve(dirName, "src/pages/"),
