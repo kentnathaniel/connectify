@@ -1,10 +1,11 @@
-import { Flex, Icon, Tooltip } from "@/components/index";
+import { Flex, Icon, Link, Tooltip } from "@/components/index";
 import { show } from "@/stores/popup";
 import { PopupType } from "@/types/index.type";
 import { IconHeart, IconMoodPlus } from "@tabler/icons-react";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import ConnectifyLogo from "@/assets/connectify-logo.svg?react";
+import { PATH } from "@/constants/path";
 
 function Navbar() {
   const dispatch = useDispatch();
@@ -19,7 +20,9 @@ function Navbar() {
 
   return (
     <Flex pt={4} mx="auto" justifyContent="space-between" align="center">
-      <Icon as={ConnectifyLogo} w={40} h={12} />
+      <Link href={PATH.HOME}>
+        <Icon as={ConnectifyLogo} w={40} h={12} />
+      </Link>
       <Flex gap={4}>
         <Tooltip label="Add new contact">
           <Icon

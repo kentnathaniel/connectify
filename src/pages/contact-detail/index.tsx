@@ -1,19 +1,28 @@
-import { Avatar, Center, Circle, Flex, Icon, Input, Text } from "@/components/index";
+import { Center, Flex, Icon, PhotoUploader, Text } from "@/components/index";
+import { PATH } from "@/constants/path";
 
-import { useGetDetailContactQuery } from "@/services/index";
+import { useGetDetailContactQuery, useUpdateContact } from "@/services/index";
 import { show } from "@/stores/popup";
 import { PopupType } from "@/types/index.type";
 import { ChakraProps, HStack } from "@chakra-ui/react";
 import { IconCamera, IconHeart, IconPencil, IconTrash } from "@tabler/icons-react";
 import { useCallback, useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
+
+type Menu = {
+  icon: typeof IconCamera;
+  label: string;
+  color?: ChakraProps["color"];
+  onClick?: () => void;
+};
 
 function ContactDetail() {
   const { id } = useParams();
   const dispatch = useDispatch();
 
   const { contact } = useGetDetailContactQuery(id);
+  const { mutateAsync: updateContact, isPending: isPendingUpdateContact } = useUpdateContact();
 
   const onDelete = useCallback(() => {
     dispatch(
@@ -32,13 +41,6 @@ function ContactDetail() {
       })
     );
   }, [dispatch, id]);
-
-  type Menu = {
-    icon: typeof IconCamera;
-    label: string;
-    color?: ChakraProps["color"];
-    onClick?: () => void;
-  };
 
   const menu: Menu[] = useMemo(
     () => [
@@ -62,16 +64,32 @@ function ContactDetail() {
     [onDelete, onEdit]
   );
 
+  const onChangePhoto = async (photo: string) => {
+    try {
+      if (!id) {
+        throw new Error("Contact ID is not found");
+      }
+
+      await updateContact({
+        contactId: id,
+        payload: { photo },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  if (!id) return <Navigate to={PATH.HOME} replace={true} />;
+
   return (
     <>
       <Center w="100%" flexDirection="column">
-        <Flex position="relative" w="fit-content">
-          <Avatar size="2xl" src={contact?.photo} />
-          <Circle bg="blue.500" p={2} position="absolute" bottom="0" right="0">
-            <Input type="file" w="100%" h="100%" display="none" />
-            <Icon as={IconCamera} w={6} h={6} color="white" />
-          </Circle>
-        </Flex>
+        <PhotoUploader
+          id="update-photo-uploader"
+          photo={contact.photo}
+          onChangePhoto={onChangePhoto}
+          loading={isPendingUpdateContact}
+        />
         <Text fontWeight="bold" fontSize="2xl" mt={4}>
           {contact.fullName}
         </Text>

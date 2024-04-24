@@ -21,6 +21,8 @@ import { useCreateContact, useGetDetailContactQuery, useUpdateContact } from "@/
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { PhotoUploader } from "../..";
 
 const editSchema = z.object({
   firstName: z.string().min(1, { message: "First name is required" }),
@@ -28,6 +30,7 @@ const editSchema = z.object({
   age: z
     .number({ invalid_type_error: "Age must be greater than 0" })
     .min(0, { message: "Age must be greater than 0" }),
+  photo: z.string().optional(),
 });
 
 type EditSchema = z.infer<typeof editSchema>;
@@ -41,6 +44,8 @@ function ModalEditContact() {
     register,
     formState: { errors },
     reset,
+    watch,
+    setValue,
   } = useForm<EditSchema>({
     resolver: zodResolver(editSchema),
   });
@@ -48,8 +53,9 @@ function ModalEditContact() {
   const type = useSelector((state: RootState) => state.popup.type);
   const id = useSelector((state: RootState) => state.popup.id);
   const dispatch = useDispatch();
+  const { contact, isFetched: contactIsFetched } = useGetDetailContactQuery(id);
 
-  const { contact } = useGetDetailContactQuery(id);
+  const photo = watch("photo");
 
   const onClose = () => {
     dispatch(hide());
@@ -73,6 +79,27 @@ function ModalEditContact() {
     }
   };
 
+  useEffect(() => {
+    register("photo");
+
+    if (type === PopupType.UPDATE && contactIsFetched) {
+      reset({
+        firstName: contact.firstName,
+        lastName: contact.lastName,
+        age: contact.age,
+        photo: contact.photo,
+      });
+    } else {
+      reset({
+        firstName: "",
+        lastName: "",
+        age: 0,
+        photo: "",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [type, contactIsFetched]);
+
   return (
     <Drawer
       isOpen={type === PopupType.CREATE || type === PopupType.UPDATE}
@@ -86,6 +113,13 @@ function ModalEditContact() {
         <DrawerBody>
           <form>
             <VStack gap={4}>
+              {type === PopupType.CREATE && (
+                <PhotoUploader
+                  id="create-photo-uploader"
+                  photo={photo}
+                  onChangePhoto={(photo) => setValue("photo", photo)}
+                />
+              )}
               <FormControl isInvalid={!!errors.firstName}>
                 <FormLabel>First Name</FormLabel>
                 <Input type="text" placeholder="Enter your first name" {...register("firstName")} />

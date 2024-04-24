@@ -32,7 +32,9 @@ export {
   Tooltip,
   Circle,
   Container,
+  CircularProgress,
 } from "@chakra-ui/react";
 
 export { default as ContactCard } from "./ContactCard";
 export { default as Navbar } from "./Navbar";
+export { default as PhotoUploader } from "./PhotoUploader";
