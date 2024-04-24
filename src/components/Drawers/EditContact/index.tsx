@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/stores/index";
 import { PopupType } from "@/types/index.type";
 import { hide } from "@/stores/popup";
-import { useCreateContact, useGetDetailContactQuery, useUpdateContact } from "@/services/index";
+import { useCreateContact, useUpdateContact } from "@/services/index";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

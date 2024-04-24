@@ -1,5 +1,5 @@
 import { generateUserMock, renderWithProviders } from "@/utils/test-helper";
-import { screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import EditContact from "./";
 import { PopupType } from "@/types/index.type";
@@ -23,6 +23,16 @@ describe("EditContact test", () => {
     expect(screen.getByTestId(EDIT_CONTACT_TEST_ID.AGE_FIELD)).toHaveValue("0");
   });
 
+  it("should be able to submit data in create mode", async () => {
+    renderWithProviders(<EditContact />, {
+      preloadedState: {
+        popup: {
+          type: PopupType.CREATE,
+        },
+      },
+    });
+  });
+
   it("should render with the correct initial data when in update mode", async () => {
     renderWithProviders(<EditContact />, {
       preloadedState: {
@@ -36,5 +46,16 @@ describe("EditContact test", () => {
     expect(screen.getByTestId(EDIT_CONTACT_TEST_ID.FIRST_NAME_FIELD)).toHaveValue(data.firstName);
     expect(screen.getByTestId(EDIT_CONTACT_TEST_ID.LAST_NAME_FIELD)).toHaveValue(data.lastName);
     expect(screen.getByTestId(EDIT_CONTACT_TEST_ID.AGE_FIELD)).toHaveValue(data.age.toString());
+  });
+
+  it("should be able to submit data in update mode", async () => {
+    renderWithProviders(<EditContact />, {
+      preloadedState: {
+        popup: {
+          type: PopupType.UPDATE,
+          data,
+        },
+      },
+    });
   });
 });
