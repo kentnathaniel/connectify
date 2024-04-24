@@ -1,11 +1,22 @@
-import { Center, Flex, Icon, Link, Navbar, PhotoUploader, Text, Tooltip } from "@/components/index";
+import {
+  Center,
+  Flex,
+  Icon,
+  Link,
+  Navbar,
+  PhotoUploader,
+  Text,
+  Tooltip,
+  Skeleton,
+  VStack,
+} from "@/components/index";
+import { MESSAGES } from "@/constants/messages";
 import { PATH } from "@/constants/path";
 import { useToggleFavorite } from "@/hooks/index";
 import { useGetDetailContactQuery, useUpdateContact } from "@/services/index";
-import { toggleFavorite } from "@/stores/favorites";
 import { show } from "@/stores/popup";
 import { PopupType } from "@/types/index.type";
-import { ChakraProps, HStack } from "@chakra-ui/react";
+import { ChakraProps, useToast } from "@chakra-ui/react";
 import {
   IconAddressBook,
   IconCamera,
@@ -14,6 +25,7 @@ import {
   IconPencil,
   IconTrash,
 } from "@tabler/icons-react";
+import { motion } from "framer-motion";
 import { useCallback, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { Navigate, useParams } from "react-router-dom";
@@ -29,9 +41,10 @@ function ContactDetail() {
   const { id } = useParams();
   const dispatch = useDispatch();
 
-  const { contact } = useGetDetailContactQuery(id);
+  const { contact, isLoading: isLoadingGetContact } = useGetDetailContactQuery(id);
   const { mutateAsync: updateContact, isPending: isPendingUpdateContact } = useUpdateContact();
   const { onToggleFavorite, isFavorite } = useToggleFavorite(id ?? "");
+  const toast = useToast();
 
   const onDelete = useCallback(() => {
     dispatch(
@@ -85,7 +98,12 @@ function ContactDetail() {
         payload: { photo },
       });
     } catch (err) {
-      console.log(err);
+      toast({
+        title: MESSAGES.REQUEST_ERROR,
+        status: "error",
+        duration: 1500,
+        isClosable: true,
+      });
     }
   };
 
@@ -102,30 +120,48 @@ function ContactDetail() {
           </Link>
         }
       />
-      <Center w="100%" flexDirection="column">
+      <Center
+        w="100%"
+        flexDirection="column"
+        as={motion.div}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
         <PhotoUploader
           id="update-photo-uploader"
           photo={contact.photo}
           onChangePhoto={onChangePhoto}
           loading={isPendingUpdateContact}
         />
-        <Text fontWeight="bold" fontSize="2xl" mt={4}>
-          {contact.fullName}
-        </Text>
-        <Text color="gray.500" mt={2}>
-          {contact.age} y.o
-        </Text>
-        <HStack mt={8}>
+
+        <VStack mt={4}>
+          {isLoadingGetContact ? (
+            <>
+              <Skeleton w={48} h={6} />
+              <Skeleton w={16} h={4} mt={4} />
+            </>
+          ) : (
+            <>
+              <Text fontWeight="bold" fontSize="2xl">
+                {contact.fullName}
+              </Text>
+              <Text color="gray.500">{contact.age} y.o</Text>
+            </>
+          )}
+        </VStack>
+
+        <Flex mt={8} direction={["column", "row"]}>
           {menu.map((v, idx) => (
             <Flex
               key={idx}
               alignItems="center"
+              justifyContent="center"
               gap={4}
               cursor="pointer"
               onClick={v.onClick}
               p={2}
-              flexDirection="column"
-              w="40"
+              direction={["row", "column"]}
+              w={["auto", "40"]}
             >
               <Icon w={6} h={6} as={v.icon} color={v.color} />
               <Text fontWeight="bold" color={v.color}>
@@ -133,7 +169,7 @@ function ContactDetail() {
               </Text>
             </Flex>
           ))}
-        </HStack>
+        </Flex>
       </Center>
     </>
   );

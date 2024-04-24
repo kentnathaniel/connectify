@@ -31,6 +31,9 @@ export {
   Container,
   CircularProgress,
   Image,
+  Skeleton,
+  SkeletonCircle,
+  SkeletonText,
 } from "@chakra-ui/react";
 
 export { default as ContactCard } from "./ContactCard";

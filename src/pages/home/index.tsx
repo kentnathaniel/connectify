@@ -9,6 +9,8 @@ import {
   Image,
   Center,
   Text,
+  Skeleton,
+  SkeletonCircle,
 } from "@/components/index";
 import { useGetContactQuery } from "@/services/index";
 import { toggleFilterFavorite } from "@/stores/favorites";
@@ -20,6 +22,7 @@ import { IconHeart, IconHeartFilled, IconMoodPlus } from "@tabler/icons-react";
 import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import EmptyStateContactImg from "@/assets/empty-state-contact.png";
+import { motion } from "framer-motion";
 
 function HomeNavbarMenu() {
   const dispatch = useDispatch();
@@ -56,13 +59,11 @@ function HomeNavbarMenu() {
   );
 }
 
-function Home() {
-  const { contacts: _contacts } = useGetContactQuery();
-  const [scrollbarColor] = useToken("colors", ["gray.200"]);
+function ContactList({ searchValue }: { searchValue: string }) {
+  const { contacts: _contacts, isLoading } = useGetContactQuery();
+
   const favoriteIds = useSelector((state: RootState) => state.favorites.ids);
   const isViewFavorites = useSelector((state: RootState) => state.favorites.isFilterFavorites);
-
-  const [searchValue, setSearchValue] = useState("");
 
   const contacts = _contacts?.filter((contact) => {
     const fullname = `${contact.firstName} ${contact.lastName}`;
@@ -73,8 +74,53 @@ function Home() {
       ((isFavorite && isViewFavorites) || !isViewFavorites)
     );
   });
-
   const isContactNotFound = contacts?.length === 0;
+
+  if (isLoading)
+    return (
+      <VStack w="100%">
+        {[...Array(6)].map((v, idx) => (
+          <Flex key={idx} w="100%" alignItems="center" p={4} gap={4} overflowX="hidden">
+            <SkeletonCircle size="12" flexShrink={0} />
+            <Flex flexGrow={1} direction="column" gap={2} pr={4}>
+              <Skeleton height={4} w="100%" />
+              <Skeleton height={4} w="75%" />
+            </Flex>
+          </Flex>
+        ))}
+      </VStack>
+    );
+
+  if (isContactNotFound)
+    return (
+      <Center
+        w="100%"
+        flexDirection="column"
+        mt={12}
+        as={motion.div}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        <Image src={EmptyStateContactImg} />
+        <Text fontSize="xl" mt={8} fontWeight="bold">
+          No contacts match your criteria.
+        </Text>
+        <Text mt={2}>Let&apos;s try with another search criteria</Text>
+      </Center>
+    );
+
+  return (
+    <>
+      {contacts?.map((contact) => (
+        <ContactCard key={contact.id} data={contact} />
+      ))}
+    </>
+  );
+}
+
+function Home() {
+  const [scrollbarColor] = useToken("colors", ["gray.200"]);
+  const [searchValue, setSearchValue] = useState("");
 
   return (
     <>
@@ -100,21 +146,7 @@ function Home() {
           },
         }}
       >
-        {isContactNotFound ? (
-          <Center w="100%" flexDirection="column" mt={12}>
-            <Image src={EmptyStateContactImg} />
-            <Text fontSize="xl" mt={8} fontWeight="bold">
-              No contacts match your criteria.
-            </Text>
-            <Text mt={2}>Let&apos;s try with another search criteria</Text>
-          </Center>
-        ) : (
-          <>
-            {contacts?.map((contact) => (
-              <ContactCard key={contact.id} data={contact} />
-            ))}
-          </>
-        )}
+        <ContactList searchValue={searchValue} />
       </VStack>
     </>
   );

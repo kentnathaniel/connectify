@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { show } from "@/stores/popup";
 import { CONTACT_CARD_TEST_ID } from "./ContactCard.const";
 import { useToggleFavorite } from "@/hooks/index";
+import { motion } from "framer-motion";
 
 type Props = {
   data: Contact;
@@ -42,6 +43,9 @@ function ContactCard(props: Props) {
           background: "gray.50",
           color: "blue.500",
         }}
+        as={motion.div}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
       >
         <Avatar size="md" src={photo} />
         <Flex px={4} alignItems="center" width="100%">

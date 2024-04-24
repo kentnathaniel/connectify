@@ -7,6 +7,7 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
+  useToast,
 } from "@chakra-ui/react";
 import { Avatar, Flex, Text } from "@/components/index";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +16,7 @@ import { PopupType } from "@/types/index.type";
 import { hide } from "@/stores/popup";
 import { useDeleteContact } from "@/services/index";
 import { DELETE_CONTACT_TEST_ID } from "./DeleteContact.const";
+import { MESSAGES } from "@/constants/messages";
 
 function ModalDeleteContact() {
   const { mutateAsync: deleteContact } = useDeleteContact();
@@ -22,6 +24,7 @@ function ModalDeleteContact() {
   const show = useSelector((state: RootState) => state.popup.type === PopupType.DELETE);
   const data = useSelector((state: RootState) => state.popup.data);
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const onClose = () => {
     dispatch(hide());
@@ -33,7 +36,12 @@ function ModalDeleteContact() {
         await deleteContact(data.id);
       }
     } catch (e) {
-      console.error(e);
+      toast({
+        title: MESSAGES.REQUEST_ERROR,
+        status: "error",
+        duration: 1500,
+        isClosable: true,
+      });
     } finally {
       onClose();
     }

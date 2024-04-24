@@ -1,4 +1,6 @@
 import { Avatar, Center, Circle, CircularProgress, Flex, Icon, Input } from "@/components/index";
+import { MESSAGES } from "@/constants/messages";
+import { useToast } from "@chakra-ui/react";
 import { IconCamera } from "@tabler/icons-react";
 import { ChangeEvent } from "react";
 
@@ -10,6 +12,8 @@ type Props = Partial<{
 
 function PhotoUploader(props: Props) {
   const { photo, onChangePhoto, loading, id } = props;
+
+  const toast = useToast();
 
   const changePictureHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -26,7 +30,12 @@ function PhotoUploader(props: Props) {
         reader.readAsDataURL(file);
       }
     } catch (err) {
-      console.log(err);
+      toast({
+        title: MESSAGES.REQUEST_ERROR,
+        status: "error",
+        duration: 1500,
+        isClosable: true,
+      });
     }
   };
 

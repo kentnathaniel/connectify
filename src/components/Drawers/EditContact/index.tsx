@@ -12,6 +12,7 @@ import {
   FormLabel,
   Input,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/stores/index";
@@ -24,14 +25,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { PhotoUploader } from "../..";
 import { EDIT_CONTACT_TEST_ID } from "./EditContact.const";
+import { MESSAGES } from "@/constants/messages";
 
 const editSchema = z.object({
   firstName: z.string().min(1, { message: "First name is required" }),
-  lastName: z.string().optional(),
+  lastName: z.string().min(1, { message: "Last name is required" }),
   age: z
     .number({ invalid_type_error: "Age must be greater than 0" })
-    .min(0, { message: "Age must be greater than 0" }),
-  photo: z.string().optional(),
+    .min(1, { message: "Age must be greater than 0" }),
+  photo: z.string().min(1, { message: "Photo is required" }),
 });
 
 type EditSchema = z.infer<typeof editSchema>;
@@ -48,6 +50,7 @@ function ModalEditContact() {
     watch,
     setValue,
     control,
+    clearErrors,
   } = useForm<EditSchema>({
     resolver: zodResolver(editSchema),
   });
@@ -55,8 +58,11 @@ function ModalEditContact() {
   const type = useSelector((state: RootState) => state.popup.type);
   const data = useSelector((state: RootState) => state.popup.data);
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const photo = watch("photo");
+  const isEditPopup = type === PopupType.UPDATE;
+  const isCreatePopup = type === PopupType.CREATE;
 
   const onClose = () => {
     dispatch(hide());
@@ -70,10 +76,22 @@ function ModalEditContact() {
           payload: { ...value, photo: data.photo },
         });
       } else {
-        createContact(value);
+        await createContact(value);
       }
+
+      toast({
+        title: `Successfully ${isEditPopup ? "modified" : "created"} the contact`,
+        status: "success",
+        duration: 1500,
+        isClosable: true,
+      });
     } catch (e) {
-      console.error(e);
+      toast({
+        title: MESSAGES.REQUEST_ERROR,
+        status: "error",
+        duration: 1500,
+        isClosable: true,
+      });
     } finally {
       onClose();
       reset();
@@ -83,7 +101,7 @@ function ModalEditContact() {
   useEffect(() => {
     register("photo");
 
-    if (type === PopupType.UPDATE && !!data) {
+    if (isEditPopup && !!data) {
       reset({
         firstName: data.firstName,
         lastName: data.lastName,
@@ -102,24 +120,27 @@ function ModalEditContact() {
   }, [type, data]);
 
   return (
-    <Drawer
-      isOpen={type === PopupType.CREATE || type === PopupType.UPDATE}
-      placement="bottom"
-      onClose={onClose}
-    >
+    <Drawer isOpen={isCreatePopup || isEditPopup} placement="bottom" onClose={onClose}>
       <DrawerOverlay />
       <DrawerContent w="container.md" mx="auto" boxShadow="2xl">
         <DrawerCloseButton />
-        <DrawerHeader>{type === PopupType.CREATE ? "Create" : "Edit"} Contact</DrawerHeader>
+        <DrawerHeader>{isCreatePopup ? "Create" : "Edit"} Contact</DrawerHeader>
         <DrawerBody>
           <form>
             <VStack gap={4}>
-              {type === PopupType.CREATE && (
-                <PhotoUploader
-                  id={EDIT_CONTACT_TEST_ID.UPLOAD_PHOTO_FIELD}
-                  photo={photo}
-                  onChangePhoto={(photo) => setValue("photo", photo)}
-                />
+              {isCreatePopup && (
+                <FormControl isInvalid={!!errors.photo}>
+                  <FormLabel>Profile Picture</FormLabel>
+                  <PhotoUploader
+                    id={EDIT_CONTACT_TEST_ID.UPLOAD_PHOTO_FIELD}
+                    photo={photo}
+                    onChangePhoto={(photo) => {
+                      setValue("photo", photo);
+                      clearErrors("photo");
+                    }}
+                  />
+                  <FormErrorMessage>{errors.photo && errors.photo.message}</FormErrorMessage>
+                </FormControl>
               )}
 
               <FormControl isInvalid={!!errors.firstName}>
@@ -160,12 +181,15 @@ function ModalEditContact() {
                 <FormLabel>Age</FormLabel>
                 <Controller
                   control={control}
-                  render={({ field: { value, onChange, ...rest } }) => (
+                  render={({ field: { onChange, ...rest } }) => (
                     <Input
                       placeholder="Enter your age"
-                      value={value}
-                      onChange={(event) => onChange(Number(event.target.value))}
                       data-testid={EDIT_CONTACT_TEST_ID.AGE_FIELD}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value);
+
+                        onChange(value ? value : 0);
+                      }}
                       {...rest}
                     />
                   )}
