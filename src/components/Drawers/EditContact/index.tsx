@@ -19,10 +19,11 @@ import { PopupType } from "@/types/index.type";
 import { hide } from "@/stores/popup";
 import { useCreateContact, useGetDetailContactQuery, useUpdateContact } from "@/services/index";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { PhotoUploader } from "../..";
+import { EDIT_CONTACT_TEST_ID } from "./EditContact.const";
 
 const editSchema = z.object({
   firstName: z.string().min(1, { message: "First name is required" }),
@@ -46,14 +47,14 @@ function ModalEditContact() {
     reset,
     watch,
     setValue,
+    control,
   } = useForm<EditSchema>({
     resolver: zodResolver(editSchema),
   });
 
   const type = useSelector((state: RootState) => state.popup.type);
-  const id = useSelector((state: RootState) => state.popup.id);
+  const data = useSelector((state: RootState) => state.popup.data);
   const dispatch = useDispatch();
-  const { contact, isFetched: contactIsFetched } = useGetDetailContactQuery(id);
 
   const photo = watch("photo");
 
@@ -63,10 +64,10 @@ function ModalEditContact() {
 
   const onSubmit = async (value: EditSchema) => {
     try {
-      if (id) {
+      if (data?.id) {
         await updateContact({
-          contactId: id,
-          payload: { ...value, photo: contact.photo },
+          contactId: data.id,
+          payload: { ...value, photo: data.photo },
         });
       } else {
         createContact(value);
@@ -82,12 +83,12 @@ function ModalEditContact() {
   useEffect(() => {
     register("photo");
 
-    if (type === PopupType.UPDATE && contactIsFetched) {
+    if (type === PopupType.UPDATE && !!data) {
       reset({
-        firstName: contact.firstName,
-        lastName: contact.lastName,
-        age: contact.age,
-        photo: contact.photo,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        age: data.age,
+        photo: data.photo,
       });
     } else {
       reset({
@@ -98,7 +99,7 @@ function ModalEditContact() {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [type, contactIsFetched]);
+  }, [type, data]);
 
   return (
     <Drawer
@@ -115,35 +116,67 @@ function ModalEditContact() {
             <VStack gap={4}>
               {type === PopupType.CREATE && (
                 <PhotoUploader
-                  id="create-photo-uploader"
+                  id={EDIT_CONTACT_TEST_ID.UPLOAD_PHOTO_FIELD}
                   photo={photo}
                   onChangePhoto={(photo) => setValue("photo", photo)}
                 />
               )}
+
               <FormControl isInvalid={!!errors.firstName}>
                 <FormLabel>First Name</FormLabel>
-                <Input type="text" placeholder="Enter your first name" {...register("firstName")} />
+                <Controller
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      type="text"
+                      placeholder="Enter your first name"
+                      data-testid={EDIT_CONTACT_TEST_ID.FIRST_NAME_FIELD}
+                      {...field}
+                    />
+                  )}
+                  name="firstName"
+                />
                 <FormErrorMessage>{errors.firstName && errors.firstName.message}</FormErrorMessage>
               </FormControl>
+
               <FormControl isInvalid={!!errors.lastName}>
                 <FormLabel>Last Name</FormLabel>
-                <Input type="text" placeholder="Enter your last name" {...register("lastName")} />
+                <Controller
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      type="text"
+                      placeholder="Enter your last name"
+                      data-testid={EDIT_CONTACT_TEST_ID.LAST_NAME_FIELD}
+                      {...field}
+                    />
+                  )}
+                  name="lastName"
+                />
                 <FormErrorMessage>{errors.lastName && errors.lastName.message}</FormErrorMessage>
               </FormControl>
+
               <FormControl isInvalid={!!errors.age}>
                 <FormLabel>Age</FormLabel>
-                <Input
-                  type="number"
-                  placeholder="Enter your age"
-                  {...register("age", {
-                    valueAsNumber: true,
-                  })}
+                <Controller
+                  control={control}
+                  render={({ field: { value, onChange, ...rest } }) => (
+                    <Input
+                      placeholder="Enter your age"
+                      value={value}
+                      onChange={(event) => onChange(Number(event.target.value))}
+                      data-testid={EDIT_CONTACT_TEST_ID.AGE_FIELD}
+                      {...rest}
+                    />
+                  )}
+                  name="age"
                 />
                 <FormErrorMessage>{errors.age && errors.age.message}</FormErrorMessage>
               </FormControl>
             </VStack>
           </form>
         </DrawerBody>
+
         <DrawerFooter>
           <Button variant="outline" mr={3} onClick={onClose}>
             Cancel

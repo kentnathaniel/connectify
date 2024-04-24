@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { PopupType } from "@/types/index.type";
+import { Contact, PopupType } from "@/types/index.type";
 
 type PopupState = {
   type: PopupType | null;
-  id?: string;
+  data?: Partial<Contact>;
 };
 
 const initialState: PopupState = {
@@ -21,7 +21,7 @@ export const popupSlice = createSlice({
       switch (action.payload.type) {
         case PopupType.DELETE:
         case PopupType.UPDATE:
-          state.id = action.payload.id;
+          state.data = action.payload.data;
           break;
         case PopupType.CREATE:
         default:
@@ -30,7 +30,7 @@ export const popupSlice = createSlice({
     },
     hide: (state) => {
       state.type = null;
-      state.id = undefined;
+      state.data = undefined;
     },
   },
 });

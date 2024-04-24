@@ -1,23 +1,26 @@
 import {
   Button,
   Drawer,
+  DrawerBody,
   DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
 } from "@chakra-ui/react";
+import { Avatar, Flex, Text } from "@/components/index";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/stores/index";
 import { PopupType } from "@/types/index.type";
 import { hide } from "@/stores/popup";
 import { useDeleteContact } from "@/services/index";
+import { DELETE_CONTACT_TEST_ID } from "./DeleteContact.const";
 
 function ModalDeleteContact() {
   const { mutateAsync: deleteContact } = useDeleteContact();
 
   const show = useSelector((state: RootState) => state.popup.type === PopupType.DELETE);
-  const id = useSelector((state: RootState) => state.popup.id);
+  const data = useSelector((state: RootState) => state.popup.data);
   const dispatch = useDispatch();
 
   const onClose = () => {
@@ -26,8 +29,8 @@ function ModalDeleteContact() {
 
   const onDelete = async () => {
     try {
-      if (id) {
-        await deleteContact(id);
+      if (data?.id) {
+        await deleteContact(data.id);
       }
     } catch (e) {
       console.error(e);
@@ -41,12 +44,25 @@ function ModalDeleteContact() {
       <DrawerOverlay />
       <DrawerContent w="container.md" mx="auto" boxShadow="2xl">
         <DrawerCloseButton />
-        <DrawerHeader>Are you sure to delete this contact?</DrawerHeader>
+        <DrawerHeader fontSize="xl">Are you sure to delete this contact?</DrawerHeader>
+        <DrawerBody fontSize="sm">
+          <Flex alignItems="center" gap={2} mb={4}>
+            <Avatar src={data?.photo} w={8} h={8} />
+            <Text fontWeight="semibold" data-testid={DELETE_CONTACT_TEST_ID.FULL_NAME}>
+              {data?.fullName}
+            </Text>
+          </Flex>
+          This action cannot be undone. This will permanently delete the contact.
+        </DrawerBody>
         <DrawerFooter>
           <Button variant="outline" mr={3} onClick={onClose}>
             Cancel
           </Button>
-          <Button colorScheme="red" onClick={onDelete}>
+          <Button
+            colorScheme="red"
+            onClick={onDelete}
+            data-testid={DELETE_CONTACT_TEST_ID.DELETE_BUTTON}
+          >
             Delete
           </Button>
         </DrawerFooter>

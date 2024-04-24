@@ -6,7 +6,7 @@ import { PATH } from "./constants";
 import { Navbar } from "./components";
 import ModalDeleteContact from "./components/Drawers/DeleteContact";
 import { Provider as ReduxProvider } from "react-redux";
-import { store } from "./stores";
+import { setupStore } from "./stores";
 import ModalEditContact from "./components/Drawers/EditContact";
 
 const queryClient = new QueryClient();
@@ -35,7 +35,7 @@ const theme = extendTheme({
 
 function App() {
   return (
-    <ReduxProvider store={store}>
+    <ReduxProvider store={setupStore()}>
       <QueryClientProvider client={queryClient}>
         <ChakraProvider theme={theme}>
           <Box bg="gray.700" w="100vw" h="100vh" overflow="hidden">

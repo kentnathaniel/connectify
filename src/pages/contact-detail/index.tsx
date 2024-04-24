@@ -28,19 +28,19 @@ function ContactDetail() {
     dispatch(
       show({
         type: PopupType.DELETE,
-        id,
+        data: contact,
       })
     );
-  }, [dispatch, id]);
+  }, [dispatch, contact]);
 
   const onEdit = useCallback(() => {
     dispatch(
       show({
         type: PopupType.UPDATE,
-        id,
+        data: contact,
       })
     );
-  }, [dispatch, id]);
+  }, [dispatch, contact]);
 
   const menu: Menu[] = useMemo(
     () => [

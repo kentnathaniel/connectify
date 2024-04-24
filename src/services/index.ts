@@ -2,7 +2,7 @@ import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Contact } from "@/types/index.type";
 import { API, QUERY_KEY } from "@/constants/index";
-import { getFullName } from "../utils";
+import { getFullName } from "../utils/string-helper";
 
 type Response<T> = {
   message: string;

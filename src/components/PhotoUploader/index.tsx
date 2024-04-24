@@ -47,6 +47,7 @@ function PhotoUploader(props: Props) {
         </Center>
       )}
       <Input
+        data-testid={id}
         id={id}
         type="file"
         w="100%"
