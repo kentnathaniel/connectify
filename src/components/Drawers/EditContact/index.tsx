@@ -14,18 +14,22 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/stores/index";
-import { PopupType } from "@/types/index.type";
-import { hide } from "@/stores/popup";
-import { useCreateContact, useUpdateContact } from "@/services/index";
-import { z } from "zod";
-import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
-import { PhotoUploader } from "../..";
-import { EDIT_CONTACT_TEST_ID } from "./EditContact.const";
+import { Controller, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { z } from "zod";
+
 import { MESSAGES } from "@/constants/messages";
+import { useCreateContact, useUpdateContact } from "@/services/index";
+import { RootState } from "@/stores/index";
+import { hide } from "@/stores/popup";
+import { PopupType } from "@/types/index.type";
+
+import { PhotoUploader } from "../..";
+
+import { EDIT_CONTACT_TEST_ID } from "./EditContact.const";
+
 
 const editSchema = z.object({
   firstName: z.string().min(1, { message: "First name is required" }),

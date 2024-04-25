@@ -1,9 +1,12 @@
-import { describe, expect, it } from "vitest";
-import { screen } from "@testing-library/react";
-import ContactCard from ".";
-import { generateUserMock, renderWithProviders } from "@/utils/test-helper";
 import "@testing-library/jest-dom/vitest";
+import { screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+
+import { generateUserMock, renderWithProviders } from "@/utils/test-helper";
+
 import { CONTACT_CARD_TEST_ID } from "./ContactCard.const";
+
+import ContactCard from ".";
 
 const data = generateUserMock();
 

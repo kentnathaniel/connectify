@@ -1,3 +1,17 @@
+import { ChakraProps, useToast } from "@chakra-ui/react";
+import {
+  IconAddressBook,
+  IconCamera,
+  IconHeart,
+  IconHeartFilled,
+  IconPencil,
+  IconTrash,
+} from "@tabler/icons-react";
+import { motion } from "framer-motion";
+import { useCallback, useMemo } from "react";
+import { useDispatch } from "react-redux";
+import { Navigate, useParams } from "react-router-dom";
+
 import {
   Center,
   Flex,
@@ -16,19 +30,6 @@ import { useToggleFavorite } from "@/hooks/index";
 import { useGetDetailContactQuery, useUpdateContact } from "@/services/index";
 import { show } from "@/stores/popup";
 import { PopupType } from "@/types/index.type";
-import { ChakraProps, useToast } from "@chakra-ui/react";
-import {
-  IconAddressBook,
-  IconCamera,
-  IconHeart,
-  IconHeartFilled,
-  IconPencil,
-  IconTrash,
-} from "@tabler/icons-react";
-import { motion } from "framer-motion";
-import { useCallback, useMemo } from "react";
-import { useDispatch } from "react-redux";
-import { Navigate, useParams } from "react-router-dom";
 
 type Menu = {
   icon: typeof IconCamera;

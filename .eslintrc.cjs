@@ -9,10 +9,27 @@ module.exports = {
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parser: "@typescript-eslint/parser",
-  plugins: ["react-refresh"],
+  plugins: ["react-refresh", "import"],
   rules: {
-    "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always",
+        groups: ["builtin", "external", "internal", "parent", "sibling", "index"],
+        pathGroups: [
+          {
+            pattern: "@/**",
+            group: "internal",
+          },
+        ],
+        alphabetize: {
+          order: "asc",
+          caseInsensitive: true,
+        },
+      },
+    ],
 
+    "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     "react/jsx-curly-brace-presence": ["error", { props: "never", children: "never" }],
     "react/react-in-jsx-scope": "off",
 

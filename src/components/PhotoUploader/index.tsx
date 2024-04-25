@@ -1,8 +1,9 @@
-import { Avatar, Center, Circle, CircularProgress, Flex, Icon, Input } from "@/components/index";
-import { MESSAGES } from "@/constants/messages";
 import { useToast } from "@chakra-ui/react";
 import { IconCamera } from "@tabler/icons-react";
 import { ChangeEvent } from "react";
+
+import { Avatar, Center, Circle, CircularProgress, Flex, Icon, Input } from "@/components/index";
+import { MESSAGES } from "@/constants/messages";
 
 type Props = Partial<{
   photo: string;

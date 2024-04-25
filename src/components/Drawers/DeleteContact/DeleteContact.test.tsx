@@ -1,9 +1,12 @@
-import { generateUserMock, renderWithProviders } from "@/utils/test-helper";
 import { screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import DeleteContact from "./";
+
 import { PopupType } from "@/types/index.type";
+import { generateUserMock, renderWithProviders } from "@/utils/test-helper";
+
 import { DELETE_CONTACT_TEST_ID } from "./DeleteContact.const";
+
+import DeleteContact from "./";
 
 const data = generateUserMock();
 

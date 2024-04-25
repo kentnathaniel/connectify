@@ -1,9 +1,13 @@
-import { generateDummyFile, generateUserMock, renderWithProviders } from "@/utils/test-helper";
 import { screen } from "@testing-library/react";
-import { describe, it, vi } from "vitest";
-import { PHOTO_UPLOADER_TEST_ID } from "./PhotoUploader.const";
-import PhotoUploader from "./";
 import userEvent from "@testing-library/user-event";
+import { describe, it, vi } from "vitest";
+
+import { generateDummyFile, generateUserMock, renderWithProviders } from "@/utils/test-helper";
+
+import { PHOTO_UPLOADER_TEST_ID } from "./PhotoUploader.const";
+
+import PhotoUploader from "./";
+
 
 const data = generateUserMock();
 

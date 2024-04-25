@@ -9,14 +9,17 @@ import {
   DrawerOverlay,
   useToast,
 } from "@chakra-ui/react";
-import { Avatar, Flex, Text } from "@/components/index";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/stores/index";
-import { PopupType } from "@/types/index.type";
-import { hide } from "@/stores/popup";
-import { useDeleteContact } from "@/services/index";
-import { DELETE_CONTACT_TEST_ID } from "./DeleteContact.const";
+
+import { Avatar, Flex, Text } from "@/components/index";
 import { MESSAGES } from "@/constants/messages";
+import { useDeleteContact } from "@/services/index";
+import { RootState } from "@/stores/index";
+import { hide } from "@/stores/popup";
+import { PopupType } from "@/types/index.type";
+
+import { DELETE_CONTACT_TEST_ID } from "./DeleteContact.const";
+
 
 function ModalDeleteContact() {
   const { mutateAsync: deleteContact } = useDeleteContact();

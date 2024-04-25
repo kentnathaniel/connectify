@@ -1,6 +1,7 @@
-import { Flex, Icon, Link } from "@/components/index";
 import { ReactElement } from "react";
+
 import ConnectifyLogo from "@/assets/connectify-logo.svg?react";
+import { Flex, Icon, Link } from "@/components/index";
 import { PATH } from "@/constants/path";
 
 function Navbar(props: { menu?: ReactElement }) {

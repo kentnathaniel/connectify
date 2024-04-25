@@ -1,8 +1,9 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { PersistConfig, persistReducer, persistStore } from "redux-persist";
-import popupReducer from "./popup";
-import favoritesReducer from "./favorites";
 import storage from "redux-persist/lib/storage";
+
+import favoritesReducer from "./favorites";
+import popupReducer from "./popup";
 
 const rootReducer = combineReducers({
   popup: popupReducer,

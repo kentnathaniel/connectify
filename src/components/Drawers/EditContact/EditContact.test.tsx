@@ -1,9 +1,12 @@
-import { generateUserMock, renderWithProviders } from "@/utils/test-helper";
 import { screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import EditContact from "./";
+
 import { PopupType } from "@/types/index.type";
+import { generateUserMock, renderWithProviders } from "@/utils/test-helper";
+
 import { EDIT_CONTACT_TEST_ID } from "./EditContact.const";
+
+import EditContact from "./";
 
 const data = generateUserMock();
 

@@ -1,3 +1,10 @@
+import { useToken } from "@chakra-ui/react";
+import { IconHeart, IconHeartFilled, IconMoodPlus } from "@tabler/icons-react";
+import { motion } from "framer-motion";
+import { useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import EmptyStateContactImg from "@/assets/empty-state-contact.png";
 import {
   Input,
   VStack,
@@ -17,12 +24,8 @@ import { toggleFilterFavorite } from "@/stores/favorites";
 import { RootState } from "@/stores/index";
 import { show } from "@/stores/popup";
 import { PopupType } from "@/types/index.type";
-import { useToken } from "@chakra-ui/react";
-import { IconHeart, IconHeartFilled, IconMoodPlus } from "@tabler/icons-react";
-import { useCallback, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import EmptyStateContactImg from "@/assets/empty-state-contact.png";
-import { motion } from "framer-motion";
+
+
 
 function HomeNavbarMenu() {
   const dispatch = useDispatch();
@@ -79,7 +82,7 @@ function ContactList({ searchValue }: { searchValue: string }) {
   if (isLoading)
     return (
       <VStack w="100%">
-        {[...Array(6)].map((v, idx) => (
+        {[...Array(6)].map((_, idx) => (
           <Flex key={idx} w="100%" alignItems="center" p={4} gap={4} overflowX="hidden">
             <SkeletonCircle size="12" flexShrink={0} />
             <Flex flexGrow={1} direction="column" gap={2} pr={4}>

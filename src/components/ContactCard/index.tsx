@@ -1,13 +1,19 @@
-import { Avatar, Flex, Text, Icon, Tooltip, Link } from "@/components/index";
-import { Contact, PopupType } from "@/types/index.type";
 import { IconTrash, IconHeart, IconHeartFilled } from "@tabler/icons-react";
-import { PATH } from "@/constants/path";
-import { generatePath } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { show } from "@/stores/popup";
-import { CONTACT_CARD_TEST_ID } from "./ContactCard.const";
-import { useToggleFavorite } from "@/hooks/index";
 import { motion } from "framer-motion";
+import { useDispatch } from "react-redux";
+import { generatePath } from "react-router-dom";
+
+import { Avatar, Flex, Text, Icon, Tooltip, Link } from "@/components/index";
+import { PATH } from "@/constants/path";
+import { useToggleFavorite } from "@/hooks/index";
+import { show } from "@/stores/popup";
+import { Contact, PopupType } from "@/types/index.type";
+
+
+
+import { CONTACT_CARD_TEST_ID } from "./ContactCard.const";
+
+
 
 type Props = {
   data: Contact;

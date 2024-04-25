@@ -1,13 +1,15 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Box, ChakraProvider, Container, extendTheme } from "@chakra-ui/react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Home, ContactDetail } from "./pages/index";
-import { PATH } from "./constants";
-import ModalDeleteContact from "./components/Drawers/DeleteContact";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider as ReduxProvider } from "react-redux";
-import { persistor, store } from "./stores";
-import ModalEditContact from "./components/Drawers/EditContact";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
+
+import ModalDeleteContact from "./components/Drawers/DeleteContact";
+import ModalEditContact from "./components/Drawers/EditContact";
+import { PATH } from "./constants";
+import { Home, ContactDetail } from "./pages/index";
+import { persistor, store } from "./stores";
+
 
 const queryClient = new QueryClient();
 

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+
 import { Contact, PopupType } from "@/types/index.type";
 
 type PopupState = {

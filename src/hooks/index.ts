@@ -1,6 +1,8 @@
-import { toggleFavorite } from "@/stores/favorites";
 import { useToast } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
+
+import { toggleFavorite } from "@/stores/favorites";
+
 import { RootState } from "../stores";
 
 export const useToggleFavorite = (id: string) => {

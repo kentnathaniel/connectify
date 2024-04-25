@@ -1,13 +1,14 @@
-import React, { PropsWithChildren } from "react";
-import { RenderOptions, render } from "@testing-library/react";
-import { Provider } from "react-redux";
 import { faker } from "@faker-js/faker";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { RenderOptions, render } from "@testing-library/react";
+import React, { PropsWithChildren } from "react";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import { PersistGate } from "redux-persist/integration/react";
 
 import { RootState, getTestingStore, persistor } from "../stores";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import { getFullName } from "./string-helper";
-import { PersistGate } from "redux-persist/integration/react";
-import { BrowserRouter } from "react-router-dom";
 
 const queryClient = new QueryClient();
 
@@ -24,7 +25,7 @@ export function renderWithProviders(
     ...renderOptions
   }: ExtendedRenderOptions = {}
 ) {
-  function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
+  function Wrapper({ children }: PropsWithChildren<object>): JSX.Element {
     return (
       <BrowserRouter>
         <Provider store={store}>
