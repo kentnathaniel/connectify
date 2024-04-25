@@ -30,7 +30,6 @@ import { PhotoUploader } from "../..";
 
 import { EDIT_CONTACT_TEST_ID } from "./EditContact.const";
 
-
 const editSchema = z.object({
   firstName: z.string().min(1, { message: "First name is required" }),
   lastName: z.string().min(1, { message: "Last name is required" }),

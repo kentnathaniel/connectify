@@ -9,11 +9,7 @@ import { useToggleFavorite } from "@/hooks/index";
 import { show } from "@/stores/popup";
 import { Contact, PopupType } from "@/types/index.type";
 
-
-
 import { CONTACT_CARD_TEST_ID } from "./ContactCard.const";
-
-
 
 type Props = {
   data: Contact;

@@ -25,8 +25,6 @@ import { RootState } from "@/stores/index";
 import { show } from "@/stores/popup";
 import { PopupType } from "@/types/index.type";
 
-
-
 function HomeNavbarMenu() {
   const dispatch = useDispatch();
   const isViewFavorites = useSelector((state: RootState) => state.favorites.isFilterFavorites);

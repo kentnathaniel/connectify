@@ -20,7 +20,6 @@ import { PopupType } from "@/types/index.type";
 
 import { DELETE_CONTACT_TEST_ID } from "./DeleteContact.const";
 
-
 function ModalDeleteContact() {
   const { mutateAsync: deleteContact } = useDeleteContact();
 

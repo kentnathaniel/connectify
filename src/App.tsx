@@ -10,7 +10,6 @@ import { PATH } from "./constants";
 import { Home, ContactDetail } from "./pages/index";
 import { persistor, store } from "./stores";
 
-
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
